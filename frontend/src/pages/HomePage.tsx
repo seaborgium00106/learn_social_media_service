@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
 
   return (
     <MainLayout>
-      <PostForm />
+      <PostForm userId={currentUserId} />
       
       {isLoading ? (
         <LoadingSpinner />

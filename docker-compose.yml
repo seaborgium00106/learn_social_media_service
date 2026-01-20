@@ -1,13 +1,13 @@
 # Full Stack Social Network Application - Docker Compose Orchestration
 #
 # Architecture:
+#   - Frontend (Port 3000): React/Vite application
 #   - NGINX (Port 80): Load balancer distributing traffic across backend instances
 #   - Backend Instances (3): Running on port 9090 internally, exposed on 9091-9093
 #   - PostgreSQL (Port 5432): Database
-#   - Frontend: Configured to use NGINX load balancer on port 80
 #
 # Access Points:
-#   - Frontend: http://localhost:3000 (or served via NGINX)
+#   - Frontend: http://localhost:3000
 #   - API via NGINX: http://localhost (recommended)
 #   - Direct Backend 1: http://localhost:9091
 #   - Direct Backend 2: http://localhost:9092
@@ -15,6 +15,9 @@
 #   - Database: localhost:5432
 #
 # Environment Variables: See .env.example
+#
+# Development Mode: docker-compose up
+# Production Mode: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 
 services:
   # PostgreSQL Database
@@ -112,6 +115,47 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+    networks:
+      - backend-network
+
+  # React/Vite Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development  # Use 'production' for production builds
+    container_name: postdb_frontend
+    restart: unless-stopped
+    environment:
+      # API Configuration
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost}
+      VITE_API_TIMEOUT: ${VITE_API_TIMEOUT:-10000}
+      # App Configuration
+      VITE_APP_NAME: ${VITE_APP_NAME:-Social Network}
+      VITE_DEFAULT_PAGE_SIZE: ${VITE_DEFAULT_PAGE_SIZE:-10}
+      # HMR Configuration for Docker
+      VITE_HMR_HOST: ${VITE_HMR_HOST:-localhost}
+      VITE_HMR_PORT: ${VITE_HMR_PORT:-3000}
+      VITE_HMR_PROTOCOL: ${VITE_HMR_PROTOCOL:-http}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    volumes:
+      # Mount source code for hot reload in development
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/tsconfig.app.json:/app/tsconfig.app.json
+      - ./frontend/tsconfig.node.json:/app/tsconfig.node.json
+      # Prevent node_modules from being overwritten
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
       - backend-network
 

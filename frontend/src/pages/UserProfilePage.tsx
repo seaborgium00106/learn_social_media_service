@@ -12,12 +12,10 @@ import { usePostsByUser } from '../hooks/usePosts';
 import { LoadingSpinner, ErrorMessage } from '../components/Common';
 import { MainLayout } from '../components/Layout';
 import { PostList, PostForm } from '../components/Posts';
-import { useUIStore } from '../stores/uiStore';
 
 const UserProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
-  const { addNotification } = useUIStore();
 
   const userIdNum = userId ? parseInt(userId, 10) : null;
 

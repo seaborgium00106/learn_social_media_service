@@ -8,7 +8,6 @@ import {
   CardContent,
   Typography,
   Box,
-  Chip,
 } from '@mui/material';
 import type { TimelinePost as TimelinePostType } from '../../types';
 import { formatRelativeTime } from '../../utils/dateFormatter';

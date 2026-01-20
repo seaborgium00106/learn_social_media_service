@@ -1,0 +1,11 @@
+# Production Override for Docker Compose
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+
+services:
+  # Frontend in production mode
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production  # Override to use production stage
+    volumes: []  # Remove volume mounts for production (no hot reload needed)
