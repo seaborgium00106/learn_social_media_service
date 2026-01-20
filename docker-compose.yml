@@ -1,3 +1,21 @@
+# Full Stack Social Network Application - Docker Compose Orchestration
+#
+# Architecture:
+#   - NGINX (Port 80): Load balancer distributing traffic across backend instances
+#   - Backend Instances (3): Running on port 9090 internally, exposed on 9091-9093
+#   - PostgreSQL (Port 5432): Database
+#   - Frontend: Configured to use NGINX load balancer on port 80
+#
+# Access Points:
+#   - Frontend: http://localhost:3000 (or served via NGINX)
+#   - API via NGINX: http://localhost (recommended)
+#   - Direct Backend 1: http://localhost:9091
+#   - Direct Backend 2: http://localhost:9092
+#   - Direct Backend 3: http://localhost:9093
+#   - Database: localhost:5432
+#
+# Environment Variables: See .env.example
+
 services:
   # PostgreSQL Database
   postgres:
