@@ -24,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/friendships")
 @RequiredArgsConstructor
 @Tag(name = "Friendship", description = "Friendship management APIs")
-@CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}, allowedHeaders = "*", maxAge = 3600)
 public class FriendshipController {
     
     private final FriendshipService friendshipService;

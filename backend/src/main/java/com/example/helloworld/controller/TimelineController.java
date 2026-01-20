@@ -25,7 +25,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/timeline")
 @RequiredArgsConstructor
 @Tag(name = "Timeline", description = "User timeline and feed management APIs")
-@CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}, allowedHeaders = "*", maxAge = 3600)
 public class TimelineController {
     
     private final TimelineService timelineService;
